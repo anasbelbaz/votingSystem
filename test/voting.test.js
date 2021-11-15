@@ -26,7 +26,7 @@ contract("Voting", function (accounts) {
         it("check only owner", async function() {
             await expectRevert(
                 this.voting.addVoter(user_2, { from: user_1 }),
-                "Ownable: caller is not the owner"
+                "only owner can access this function"
             );
         });
 
