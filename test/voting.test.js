@@ -23,13 +23,6 @@ contract("Voting", function (accounts) {
             );
         });
 
-        it("check only owner", async function() {
-            await expectRevert(
-                this.voting.addVoter(user_2, { from: user_1 }),
-                "only owner can access this function"
-            );
-        });
-
         it("check already registered voters", async function() {
             await this.voting.addVoter(user_1, { from: owner });
             await expectRevert(
@@ -114,7 +107,14 @@ contract("Voting", function (accounts) {
         beforeEach(async function () {
             this.voting = await Voting.new({ from: owner });
         });
-        
+
+        it("check workflow status", async function() {
+            await expectRevert(
+                this.voting.tallyVotes({ from: owner }),
+                "Current status is not voting session ended."
+            );
+        });
+
         it("tally votes", async function() {
             await this.voting.addVoter(user_1, { from: owner });
             await this.voting.addVoter(user_2, { from: owner });
